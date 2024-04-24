@@ -1,0 +1,50 @@
+---
+title: "DS 202 Final Project Proposal"
+author: "Jesse Dolan, Bela Banegas, Jennifer Godbersen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Research Project Title: Data Science Salaries
+
+This data set includes information about data science salaries. Variables include: year, experience level, employment type (full-time, part-time, contract, freelance), job title, salary, salary currency, salary in usd, employee residence, remote ratio (amount of work done remotely), and company location.
+
+```{r}
+file_path <- "salaries.csv"
+
+df <- read.csv(file_path)
+
+head(df)
+
+```
+
+Data cleaning steps: There do not appear to be any empty rows or NA values.
+
+```{r}
+empty_rows <- df[!complete.cases(df), ]
+if (any(is.na(df))) {
+  print("There are NA values in the dataframe.")
+} else {
+  print("There are no NA values in the dataframe.")
+}
+```
+
+Our current project idea is to identify the current salaries for people in our field. Particular variables of interest are year, experience level, job title, remote work ratio, and company location.
+
+We will be exploring the following relationships:
+
+-   Salary over time (Bela)
+
+-   Salary by company size (Bela)
+
+-   Salary by job title (Jennifer)
+
+-   Salary by remote ratio (Jennifer)
+
+-   Salary by location - country (Jesse)
+
+-   Salary by experience (Jesse)
