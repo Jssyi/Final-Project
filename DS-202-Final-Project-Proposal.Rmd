@@ -40,6 +40,8 @@ We will be exploring the following relationships:
 -   Salary over time (Bela)
 
 ```{r}
+library(ggplot2)
+library(dplyr)
 # Group by year and calculate the mean salary
 salary_over_time <- df %>%
   group_by(work_year) %>%
@@ -66,7 +68,8 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
 -   Salary by company size (Bela)
 
 ```{r}
-
+library(ggplot2)
+library(dplyr)
 # Group by year and company size, and calculate the mean salary
 salary_over_time <- df %>%
   group_by(work_year, company_size) %>%
@@ -77,6 +80,7 @@ salary_over_time <- df %>%
 
 # Define colors and labels for each company size
 company_size_labels <- c("small" = "Small", "medium" = "Medium", "large" = "Large")
+company_size_colors <- c("small" = "blue", "medium" = "red", "large" = "yellow")
 
 
 ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_size, linetype = company_size)) +
