@@ -47,14 +47,10 @@ We will be exploring the following relationships:
 
 -   Salary by location - country (Jesse)
 
--   Salary by experience (Jesse)
-
-```{r}
+```{r, fig.width=12, fig.height=6}
 # Load necessary libraries
 library(ggplot2)
 library(dplyr)
-library(gridExtra)  # For adjusting plot margins
-
 
 # Group by unique company_location and calculate the mean salary
 salary_summary <- df %>%
@@ -64,11 +60,9 @@ salary_summary <- df %>%
     sd_salary = sd(salary_in_usd)
   )
 
-options(repr.plot.width = 20, repr.plot.height = 6)  # Adjusts plot output width and height
-
 
 ggplot(salary_summary, aes(x = company_location, y = mean_salary)) +
-  geom_bar(stat = "identity", fill = "skyblue", color = "black", width = 0.7) +
+  geom_bar(stat = "identity", fill = "green", color = "black", width = 0.7) +
   geom_errorbar(aes(ymin = mean_salary - sd_salary, ymax = mean_salary + sd_salary), width = 0.2) +
   labs(
     title = "Average Salary by Unique Company Location",
@@ -82,4 +76,44 @@ ggplot(salary_summary, aes(x = company_location, y = mean_salary)) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 
 ```
+
+-   Salary by experience (Jesse)
+
+```{r, fig.width=12, fig.height=6}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Group by unique company_location and calculate the mean salary
+salary_summary <- df %>%
+  group_by(experience_level) %>%
+  summarize(
+    mean_salary = mean(salary_in_usd),
+    sd_salary = sd(salary_in_usd)
+  )
+df <- df %>%
+  mutate(experience_level = case_when(
+    experience_level == "EN" ~ "Entry-Level",
+    experience_level == "EX" ~ "Executive",
+    experience_level == "SE" ~ "Senior",
+    experience_level == "MI" ~ "Mid-Level",
+    TRUE ~ experience_level  # Default if no match
+  ))
+
+ggplot(salary_summary, aes(x = experience_level, y = mean_salary)) +
+  geom_bar(stat = "identity", fill = "red", color = "black", width = 0.7) +
+  geom_errorbar(aes(ymin = mean_salary - sd_salary, ymax = mean_salary + sd_salary), width = 0.2) +
+  labs(
+    title = "Average Salary by Experience Level",
+    x = "Experience Level",
+    y = "Mean Salary ($)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate labels for better spacing
+  ) +
+  scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
+
+```
+
 
