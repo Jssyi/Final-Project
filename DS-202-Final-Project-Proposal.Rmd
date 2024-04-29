@@ -48,3 +48,38 @@ We will be exploring the following relationships:
 -   Salary by location - country (Jesse)
 
 -   Salary by experience (Jesse)
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(gridExtra)  # For adjusting plot margins
+
+
+# Group by unique company_location and calculate the mean salary
+salary_summary <- df %>%
+  group_by(company_location) %>%
+  summarize(
+    mean_salary = mean(salary_in_usd),
+    sd_salary = sd(salary_in_usd)
+  )
+
+options(repr.plot.width = 20, repr.plot.height = 6)  # Adjusts plot output width and height
+
+
+ggplot(salary_summary, aes(x = company_location, y = mean_salary)) +
+  geom_bar(stat = "identity", fill = "skyblue", color = "black", width = 0.7) +
+  geom_errorbar(aes(ymin = mean_salary - sd_salary, ymax = mean_salary + sd_salary), width = 0.2) +
+  labs(
+    title = "Average Salary by Unique Company Location",
+    x = "Company Location",
+    y = "Mean Salary ($)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1)  # Rotate labels for better spacing
+  ) +
+  scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
+
+```
+
