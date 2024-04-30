@@ -33,4 +33,18 @@ if (any(is.na(df))) {
 }
 ```
 
-Our current project idea is to identify the current salaries for people in our field. Particular variables of interest are experience level, job title, remote work ratio, and company title.
+Our current project idea is to identify the current salaries for people in our field. Particular variables of interest are year, experience level, job title, remote work ratio, and company location.
+
+We will be exploring the following relationships:
+
+-   Salary over time (Bela)
+
+-   Salary by company size (Bela)
+
+-   Salary by job title (Jennifer)
+
+-   Salary by remote ratio (Jennifer)
+
+-   Salary by location - country (Jesse)
+
+-   Salary by experience (Jesse)

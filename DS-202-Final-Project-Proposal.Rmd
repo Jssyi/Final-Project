@@ -176,3 +176,84 @@ ggplot(salary_summary, aes(x = experience_level, y = mean_salary)) +
 
 ```
 
+```{r echo=TRUE, message=TRUE, warning=TRUE}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+# Calculate unique job titles with count > 50
+unique_job_titles <- df %>%
+  filter(!is.na(job_title)) %>%  # Filter out missing values
+  group_by(job_title) %>%
+  summarize(job_count = n()) %>%
+  filter(job_count > 50) %>%
+  pull(job_title)  # Extract unique job titles as vector
+
+# Filter the original dataframe for plotting
+df_filtered <- df %>%
+  filter(!is.na(job_title)) %>%  # Filter out missing values
+  filter(job_title %in% unique_job_titles)
+
+# Create the plot using the filtered dataframe
+ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
+  geom_boxplot(fill = "skyblue", color = "black", outlier.shape = NA) +  # Use geom_boxplot to create boxplots
+  geom_jitter(data = df_filtered %>% filter(salary_in_usd < quantile(salary_in_usd, 0.25) - 1.5*IQR(salary_in_usd) | salary_in_usd > quantile(salary_in_usd, 0.75) + 1.5*IQR(salary_in_usd)), width = 0.2, color = "black", alpha = 0.5) +
+  geom_hline(yintercept = median(df_filtered$salary_in_usd), color = "red", linetype = "dashed") +  # Add a dashed line for median
+  labs(
+    title = "Salary Distribution by Job Title",
+    x = "Job Title",
+    y = "Salary ($)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1)  # Rotate labels for better spacing
+  ) +
+  scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
+
+```
+
+
+```{r}
+
+# Load necessary library
+library(ggplot2)
+library(scales)
+
+# Get frequencies of unique values in the remote_ratio column
+remote_ratio_frequency <- table(df$remote_ratio)
+
+# Get frequencies of unique values in the remote_ratio column
+remote_ratio_frequency <- table(df$remote_ratio)
+
+# Convert the frequency table to a dataframe
+remote_ratio_df <- as.data.frame(remote_ratio_frequency)
+
+# Rename the columns for clarity
+names(remote_ratio_df) <- c("Remote Ratio", "Frequency")
+
+# Histogram of Remote Ratio
+ggplot(remote_ratio_df, aes(x = `Remote Ratio`, y = Frequency)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(
+    title = "Histogram of Remote Ratio",
+    x = "Remote Ratio (%)",
+    y = "Count (# of entries)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+
+
+# Create the box plot with faceting
+ggplot(df, aes(x = "", y = salary_in_usd)) +
+  geom_boxplot(fill = "skyblue", color = "black") +
+  facet_wrap(~ remote_ratio, scales = "free_x", nrow = 1) +
+  labs(
+    title = "Salary Distribution by Remote Ratio",
+    x = "Remote Ratio (%)", 
+    y = "Salary ($)"
+  ) +
+  scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
+
+
+```
