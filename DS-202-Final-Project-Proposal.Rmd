@@ -64,7 +64,6 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
 
-
 -   Salary by company size (Bela)
 
 ```{r}
@@ -99,7 +98,6 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  
 ```
-
 
 -   Salary by job title (Jennifer)
 
@@ -211,14 +209,16 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
   ) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 
+
 ```
 
-
-```{r}
+```{r echo=TRUE}
 
 # Load necessary library
 library(ggplot2)
 library(scales)
+
+df$remote_ratio <- factor(df$remote_ratio, levels = c(0, 50, 100))
 
 # Get frequencies of unique values in the remote_ratio column
 remote_ratio_frequency <- table(df$remote_ratio)
@@ -244,6 +244,42 @@ ggplot(remote_ratio_df, aes(x = `Remote Ratio`, y = Frequency)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
 
 
+# Calculate count of jobs for each combination of time and remote_ratio
+job_counts <- aggregate(job_title ~ work_year + remote_ratio, data = df, FUN = length)
+
+# Plot
+ggplot(job_counts, aes(x = work_year, y = job_title, group = remote_ratio, color = remote_ratio)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Number of Jobs by Remote Ratio Over Time",
+       x = "Year",
+       y = "Number of Jobs",
+       color = "Remote Ratio") +
+  scale_color_manual(values = c("red", "green", "skyblue")) +
+  theme_minimal()
+
+# Convert remote_ratio to factor to treat it as a categorical variable
+df$remote_ratio <- factor(df$remote_ratio)
+
+# Convert time to factor if it's not already
+df$work_year <- as.factor(df$work_year)
+df$work_year <- factor(df$work_year, levels = c("2020", "2021", "2022", "2023", "2024"))
+
+# Calculate average salary for each combination of time and remote_ratio
+average_salary <- aggregate(salary_in_usd ~ work_year + remote_ratio, data = df, FUN = mean)
+
+
+# Average Salary by Remote Ratio Over Time
+ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_ratio, color = remote_ratio)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Average Salary by Remote Ratio Over Time",
+       x = "Year",
+       y = "Average Salary (USD)",
+       color = "Remote Ratio") +
+  scale_color_manual(values = c("red", "green", "skyblue")) +
+  theme_minimal()
+
 # Create the box plot with faceting
 ggplot(df, aes(x = "", y = salary_in_usd)) +
   geom_boxplot(fill = "skyblue", color = "black") +
@@ -252,8 +288,7 @@ ggplot(df, aes(x = "", y = salary_in_usd)) +
     title = "Salary Distribution by Remote Ratio",
     x = "Remote Ratio (%)", 
     y = "Salary ($)"
-  ) +
-  scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
+  ) + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
 
 
 ```
