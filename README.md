@@ -179,6 +179,9 @@ ggplot(salary_summary, aes(x = experience_level, y = mean_salary)) +
 
 ```
 
+![image](https://github.com/Jssyi/Final-Project/assets/158086989/7eedcf0a-ebbd-4275-9dfb-602c928896ba)
+
+
 ```{r echo=TRUE, message=TRUE, warning=TRUE}
 # Load necessary libraries
 library(ggplot2)
