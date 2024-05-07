@@ -134,7 +134,7 @@ ggplot(salary_summary, aes(x = reorder(company_location, median_salary), y = med
   ) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 ```
-
+![image](https://github.com/Jssyi/Final-Project/assets/158086989/de31d39e-b333-4c59-bdaa-d3deb862f332)
 
 The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately $300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
 
