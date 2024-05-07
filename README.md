@@ -1,4 +1,4 @@
-# Final-Project---
+---
 title: "DS 202 Final Project Proposal"
 author: "Jesse Dolan, Bela Banegas, Jennifer Godbersen"
 date: "`r Sys.Date()`"
@@ -110,32 +110,35 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
 library(ggplot2)
 library(dplyr)
 
-# Group by unique company_location and calculate the mean salary
+# Group by unique company_location and calculate the median salary, sorted by median_salary
 salary_summary <- df %>%
   group_by(company_location) %>%
   summarize(
-    mean_salary = mean(salary_in_usd),
-    sd_salary = sd(salary_in_usd)
-  )
+    median_salary = median(salary_in_usd),
+    iqr_salary = IQR(salary_in_usd)  # Using IQR for error bars
+  ) %>%
+  arrange(median_salary)  # Sort by median salary
 
-
-ggplot(salary_summary, aes(x = company_location, y = mean_salary)) +
+# Create the plot with sorted median salary and IQR error bars
+ggplot(salary_summary, aes(x = reorder(company_location, median_salary), y = median_salary)) +
   geom_bar(stat = "identity", fill = "green", color = "black", width = 0.7) +
-  geom_errorbar(aes(ymin = mean_salary - sd_salary, ymax = mean_salary + sd_salary), width = 0.2) +
+  geom_errorbar(aes(ymin = median_salary - iqr_salary/2, ymax = median_salary + iqr_salary/2), width = 0.2) +
   labs(
-    title = "Average Salary by Unique Company Location",
+    title = "Median Salary by Unique Company Location (Sorted)",
     x = "Company Location",
-    y = "Mean Salary ($)"
+    y = "Median Salary ($)"
   ) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 90, hjust = 1)  # Rotate labels for better spacing
   ) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
-
 ```
-![image](https://github.com/Jssyi/Final-Project/assets/158086989/208b7e82-3f67-4c1a-878a-8ee739df76e5)
 
+
+The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately $300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
+
+Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about $150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
 
 -   Salary by experience (Jesse)
 
