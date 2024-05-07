@@ -134,6 +134,8 @@ ggplot(salary_summary, aes(x = company_location, y = mean_salary)) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 
 ```
+![image](https://github.com/Jssyi/Final-Project/assets/158086989/208b7e82-3f67-4c1a-878a-8ee739df76e5)
+
 
 -   Salary by experience (Jesse)
 
