@@ -39,7 +39,7 @@ We will be exploring the following relationships:
 
 -   Salary over time (Bela)
 
-```{r}
+```{r echo=TRUE}
 library(ggplot2)
 library(dplyr)
 # Group by year and calculate the mean salary
@@ -66,7 +66,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
 
 -   Salary by company size (Bela)
 
-```{r}
+```{r echo=TRUE}
 library(ggplot2)
 library(dplyr)
 # Group by year and company size, and calculate the mean salary
@@ -105,7 +105,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
 
 -   Salary by location - country (Jesse)
 
-```{r, fig.width=12, fig.height=6}
+```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
 library(ggplot2)
 library(dplyr)
@@ -137,7 +137,7 @@ ggplot(salary_summary, aes(x = company_location, y = mean_salary)) +
 
 -   Salary by experience (Jesse)
 
-```{r, fig.width=12, fig.height=6}
+```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
 library(ggplot2)
 library(dplyr)
@@ -266,16 +266,16 @@ df$work_year <- as.factor(df$work_year)
 df$work_year <- factor(df$work_year, levels = c("2020", "2021", "2022", "2023", "2024"))
 
 # Calculate average salary for each combination of time and remote_ratio
-average_salary <- aggregate(salary_in_usd ~ work_year + remote_ratio, data = df, FUN = mean)
+average_salary <- aggregate(salary_in_usd ~ work_year + remote_ratio, data = df, FUN = median)
 
 
 # Average Salary by Remote Ratio Over Time
 ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_ratio, color = remote_ratio)) +
   geom_line() +
   geom_point() +
-  labs(title = "Average Salary by Remote Ratio Over Time",
+  labs(title = "Median Salary by Remote Ratio Over Time",
        x = "Year",
-       y = "Average Salary (USD)",
+       y = "Median Salary (USD)",
        color = "Remote Ratio") +
   scale_color_manual(values = c("red", "green", "skyblue")) +
   theme_minimal()
