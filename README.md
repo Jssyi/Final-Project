@@ -134,7 +134,7 @@ ggplot(salary_summary, aes(x = reorder(company_location, median_salary), y = med
   ) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 ```
-![image](https://github.com/Jssyi/Final-Project/assets/158086989/de31d39e-b333-4c59-bdaa-d3deb862f332)
+
 
 The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately $300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
 
@@ -147,13 +147,7 @@ Meanwhile, the median salary in the United States, which is often considered a h
 library(ggplot2)
 library(dplyr)
 
-# Group by unique company_location and calculate the mean salary
-salary_summary <- df %>%
-  group_by(experience_level) %>%
-  summarize(
-    mean_salary = mean(salary_in_usd),
-    sd_salary = sd(salary_in_usd)
-  )
+# Create consistent experience level naming
 df <- df %>%
   mutate(experience_level = case_when(
     experience_level == "EN" ~ "Entry-Level",
@@ -163,23 +157,33 @@ df <- df %>%
     TRUE ~ experience_level  # Default if no match
   ))
 
-ggplot(salary_summary, aes(x = experience_level, y = mean_salary)) +
-  geom_bar(stat = "identity", fill = "red", color = "black", width = 0.7) +
-  geom_errorbar(aes(ymin = mean_salary - sd_salary, ymax = mean_salary + sd_salary), width = 0.2) +
+# Calculate the median salary by work year and experience level
+median_salary <- df %>%
+  group_by(work_year, experience_level) %>%
+  summarize(
+    median_salary = median(salary_in_usd, na.rm = TRUE)  # Using median
+  )
+
+# Create a line plot with median salary over time by experience level
+ggplot(median_salary, aes(x = work_year, y = median_salary, group = experience_level, color = experience_level)) +
+  geom_line() +
+  geom_point() +
   labs(
-    title = "Average Salary by Experience Level",
-    x = "Experience Level",
-    y = "Mean Salary ($)"
+    title = "Median Salary by Experience Level Over Time",
+    x = "Year",
+    y = "Median Salary (USD)",
+    color = "Experience Level"
   ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate labels for better spacing
-  ) +
-  scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
+  scale_color_manual(values = c("red", "green", "skyblue", "yellow")) +
+  theme_minimal()
 
 ```
 
-![image](https://github.com/Jssyi/Final-Project/assets/158086989/7eedcf0a-ebbd-4275-9dfb-602c928896ba)
+The graph displays the median salary for data science roles across four experience levels—Entry-Level, Mid-Level, Senior, and Executive—from 2020 to 2023. As expected, the salaries increase with experience, with Entry-Level consistently earning the least and Executive earning the most. This trend remains consistent throughout the years plotted, indicating a clear progression in compensation as professionals advance in their careers. The gap between the different levels is significant.
+
+Over the years, the graph shows a general upward trend in median salary across all experience levels, although the rate of increase varies. The difference between Mid-Level and Senior is notable, with Senior positions commanding a much higher salary, reflecting the added responsibility and expertise required at that level. The consistency in salary growth over the period indicates a robust market for data science roles, with experienced professionals enjoying significant compensation advantages. Despite minor fluctuations, the overall upward trajectory suggests a positive outlook for career progression in the data science field.
+
+![image](https://github.com/Jssyi/Final-Project/assets/158086989/c034b814-23ce-42af-b755-9eee0d9031e6)
 
 
 ```{r echo=TRUE, message=TRUE, warning=TRUE}
