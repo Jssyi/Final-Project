@@ -22,8 +22,6 @@ head(df)
 
 ```
 
-Data cleaning steps: There do not appear to be any empty rows or NA values.
-
 ```{r}
 empty_rows <- df[!complete.cases(df), ]
 if (any(is.na(df))) {
@@ -32,6 +30,34 @@ if (any(is.na(df))) {
   print("There are no NA values in the dataframe.")
 }
 ```
+
+Data cleaning steps:
+
+There are no empty rows, columns, or NA values at all. We didn't need to sort anything out because we included all necessary sorting inside of our visualization steps. Our data includes 10 different variables listed here.
+
+Variables (10):
+
+work_year -\> (2020-2024)
+
+experience_level -\> (This includes values such as Entry-Level and Senior)
+
+job_title -\> (Includes a range of different job titles in the field)
+
+salary -\> (Salary in currency of the country the job is in)
+
+salary_currency -\> (The type of currency the salary is in)
+
+salary_in_usd -\> (The salary number in USD)
+
+remote_ratio -\> (Either 0, 50, or 100, for In-person, Hybrid, and Remote respectively)
+
+company_location -\> (Company location by country)
+
+company_size -\> (Company size, either S, M or L)
+
+We recieved this data from kaggle and it has 13732 rows
+
+<https://www.kaggle.com/datasets/mexwell/data-science-salary-data>
 
 Our current project idea is to identify the current salaries for people in our field. Particular variables of interest are year, experience level, job title, remote work ratio, and company location.
 
@@ -135,9 +161,9 @@ ggplot(salary_summary, aes(x = reorder(company_location, median_salary), y = med
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 ```
 
-The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately $300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
+The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately \$300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
 
-Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about $150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
+Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about \$150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
 
 -   Salary by experience (Jesse)
 
