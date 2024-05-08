@@ -346,6 +346,8 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
 ```
 [![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salarybyjobtitle.png)
 
+#### Discussion: 
+
 
 ### RQ6: Salary by Remote Ratio and Company Size
 
@@ -477,6 +479,7 @@ ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
 
 #### Discussion: 
 
+Finally, we wanted to look at the individual distributions of salary by remote ratio and company size. There are some striking differences between the intersections, with in-person and remote positions at medium companies having very high outliers (potentially due to the much larger sample size). Surprisingly, the hybrid positions at large companies also had a notable amount of outliers. The hybrid positions at small and medium companies had very small distributions with no outliers, which may very well be caused by the small sample sizes in these categories. The greatest mean salary belonged to the in-person positions at medium-sized companies, followed by the remote positions at large companies and the in-person positions at large companies. 
 
 ## Conclusion
 
