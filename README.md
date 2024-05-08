@@ -95,7 +95,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
-[![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/avgsalary(1).png)
+![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/avgsalary(1).png)
 
 ###   RQ2: Salary by Company Size
 
@@ -131,7 +131,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  
 ```
-[![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/avgsalarycompany(1).png)
+![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/avgsalarycompany(1).png)
 
 After discussing the previous graphs in our final presentation I decided to make changes to the graphs
 to include median salary rather than mean. This will address issues of extreme variance and outliers while 
@@ -168,7 +168,7 @@ ggplot(salary_over_time, aes(x = work_year, y = median_salary)) +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
 
-[![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/mediansalaryovertime.png)
+![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/mediansalaryovertime.png)
 
 #### Discussion: 
 
@@ -216,7 +216,7 @@ ggplot(salary_over_time, aes(x = work_year, y = median_salary, color = company_s
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)
 ```
-[![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/mediansalarycompany.png)
+![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/mediansalarycompany.png)
 
 #### Discussion: 
 
@@ -344,10 +344,11 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 
 ```
-[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salarybyjobtitle.png)
+![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salarybyjobtitle.png)
 
 #### Discussion: 
 
+To investigate the highest-paying job titles in data science, we took the titles with over 50 entries in the data set (others tended to be slight variations or mispellings of more popular categories) and examined the salary distributions. The red line indicates the average median salary across all positions in the data set, and the x-axis is organized from highest median salary to lowest. It can be seen that the highest median salaries tend to belong to the job title of Applied Scientist, Data Science Manager, ML Engineer/Scientist, Research Scientist/Engineer, and AI Engineer. Lower-paying job titles included analyst positions such as Business Intelligence Analyst, Data Analyst, and Research Analyst. The positions with higher median salaries tended to have more and greater outliers (except for the very highest two), with some up to $800,000 USD. 
 
 ### RQ6: Salary by Remote Ratio and Company Size
 
@@ -367,7 +368,7 @@ cat("\nCounts for each level of remote_ratio:\n")
 print(summary(df$remote_ratio))
 
 ```
-[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/table.png)
+![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/table.png)
 
 #### Discussion: 
 
@@ -397,7 +398,7 @@ ggplot(summary_df, aes(x = company_size, y = prop, fill = remote_ratio)) +
   theme_minimal()
 
 ```
-[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/stackedbarchart.png)
+![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/stackedbarchart.png)
 
 #### Discussion: 
 
@@ -423,7 +424,7 @@ ggplot(job_counts, aes(x = work_year, y = job_title, group = remote_ratio, color
   theme(axis.text.x = element_text(angle = 45, hjust = 0.5, vjust = 0.5))  # Rotate y-axis labels vertically
 
 ```
-[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/jobsovertime.png)
+![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/jobsovertime.png)
 
 #### Discussion: 
 
@@ -453,7 +454,7 @@ ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_rati
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
-[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salaryovertime.png)
+![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salaryovertime.png)
 
 #### Discussion: 
 
@@ -475,7 +476,7 @@ ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
         legend.position = "none")  # Remove legend
 
 ```
-[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/remoteratiosizedistribution.png)
+![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/remoteratiosizedistribution.png)
 
 #### Discussion: 
 
