@@ -1,16 +1,11 @@
----
-title: "DS 202 Final Project Proposal"
-author: "Jesse Dolan, Bela Banegas, Jennifer Godbersen"
-date: "`r Sys.Date()`"
-output: html_document
----
+# Data Science Salaries
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+#### Jesse Dolan, Bela Banegas, Jennifer Godbersen
 
-Research Project Title: Data Science Salaries
+## Introduction
 
+
+## Data 
 This data set includes information about data science salaries. Variables include: year, experience level, employment type (full-time, part-time, contract, freelance), job title, salary, salary currency, salary in usd, employee residence, remote ratio (amount of work done remotely), and company location.
 
 ```{r}
@@ -22,8 +17,6 @@ head(df)
 
 ```
 
-Data cleaning steps: There do not appear to be any empty rows or NA values.
-
 ```{r}
 empty_rows <- df[!complete.cases(df), ]
 if (any(is.na(df))) {
@@ -33,13 +26,43 @@ if (any(is.na(df))) {
 }
 ```
 
-Our current project idea is to identify the current salaries for people in our field. Particular variables of interest are year, experience level, job title, remote work ratio, and company location.
+Data cleaning steps:
 
-We will be exploring the following relationships:
+There are no empty rows, columns, or NA values at all. We didn't need to sort anything out because we included all necessary sorting inside of our visualization steps. 
 
--   Salary over time (Bela)
+## Variables
 
-```{r}
+Our data includes 10 different variables listed here.
+
+Variables (10):
+
+work_year -\> (2020-2024)
+
+experience_level -\> (This includes values such as Entry-Level and Senior)
+
+job_title -\> (Includes a range of different job titles in the field)
+
+salary -\> (Salary in currency of the country the job is in)
+
+salary_currency -\> (The type of currency the salary is in)
+
+salary_in_usd -\> (The salary number in USD)
+
+remote_ratio -\> (Either 0, 50, or 100, for In-person, Hybrid, and Remote respectively)
+
+company_location -\> (Company location by country)
+
+company_size -\> (Company size, either S, M or L)
+
+We recieved this data from kaggle and it has 13732 rows
+
+<https://www.kaggle.com/datasets/mexwell/data-science-salary-data>
+
+## Results
+
+###   Salary Over Time
+
+```{r echo=TRUE}
 library(ggplot2)
 library(dplyr)
 # Group by year and calculate the mean salary
@@ -64,9 +87,9 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
 
--   Salary by company size (Bela)
+###   Salary by Company Size
 
-```{r}
+```{r echo=TRUE}
 library(ggplot2)
 library(dplyr)
 # Group by year and company size, and calculate the mean salary
@@ -99,13 +122,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
   scale_y_continuous(labels = scales::comma)  
 ```
 
--   Salary by job title (Jennifer)
-
--   Salary by remote ratio (Jennifer)
-
--   Salary by location - country (Jesse)
-
-```{r, fig.width=12, fig.height=6}
+```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
 library(ggplot2)
 library(dplyr)
@@ -134,17 +151,15 @@ ggplot(salary_summary, aes(x = reorder(company_location, median_salary), y = med
   ) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 ```
+![image](https://github.com/Jssyi/Final-Project/assets/158086989/d0c67af1-359a-4cf5-bcde-f1607844cb30)
 
-![image](https://github.com/Jssyi/Final-Project/assets/158086989/80ca34c0-9135-4f5e-86c8-c6fa5c3a85f2)
+The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately \$300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
 
+Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about \$150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
 
-The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately $300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
+###   Salary by Experience
 
-Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about $150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
-
--   Salary by experience (Jesse)
-
-```{r, fig.width=12, fig.height=6}
+```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
 library(ggplot2)
 library(dplyr)
@@ -179,14 +194,17 @@ ggplot(median_salary, aes(x = work_year, y = median_salary, group = experience_l
   scale_color_manual(values = c("red", "green", "skyblue", "yellow")) +
   theme_minimal()
 
+
 ```
+![image](https://github.com/Jssyi/Final-Project/assets/158086989/a1e29a3a-08b6-4162-b7b6-614cdcff354c)
+
 
 The graph displays the median salary for data science roles across four experience levels—Entry-Level, Mid-Level, Senior, and Executive—from 2020 to 2024. As expected, the salaries increase with experience, with Entry-Level consistently earning the least and Executive earning the most. This trend remains consistent throughout the years plotted, indicating a clear progression in compensation as professionals advance in their careers. The gap between the different levels is significant.
 
 Over the years, the graph shows a general upward trend in median salary across all experience levels, although the rate of increase varies. The difference between Mid-Level and Senior is notable, with Senior positions commanding a much higher salary, reflecting the added responsibility and expertise required at that level. The consistency in salary growth over the period indicates a robust market for data science roles, with experienced professionals enjoying significant compensation advantages. Despite minor fluctuations, the overall upward trajectory suggests a positive outlook for career progression in the data science field.
 
-![image](https://github.com/Jssyi/Final-Project/assets/158086989/c034b814-23ce-42af-b755-9eee0d9031e6)
 
+### Salary by Job Title
 
 ```{r echo=TRUE, message=TRUE, warning=TRUE}
 # Load necessary libraries
@@ -225,6 +243,7 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
 
 
 ```
+### Salary for Remote Ratio by Company Size
 
 ```{r echo=TRUE}
 
@@ -280,16 +299,16 @@ df$work_year <- as.factor(df$work_year)
 df$work_year <- factor(df$work_year, levels = c("2020", "2021", "2022", "2023", "2024"))
 
 # Calculate average salary for each combination of time and remote_ratio
-average_salary <- aggregate(salary_in_usd ~ work_year + remote_ratio, data = df, FUN = mean)
+average_salary <- aggregate(salary_in_usd ~ work_year + remote_ratio, data = df, FUN = median)
 
 
 # Average Salary by Remote Ratio Over Time
 ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_ratio, color = remote_ratio)) +
   geom_line() +
   geom_point() +
-  labs(title = "Average Salary by Remote Ratio Over Time",
+  labs(title = "Median Salary by Remote Ratio Over Time",
        x = "Year",
-       y = "Average Salary (USD)",
+       y = "Median Salary (USD)",
        color = "Remote Ratio") +
   scale_color_manual(values = c("red", "green", "skyblue")) +
   theme_minimal()
@@ -306,3 +325,5 @@ ggplot(df, aes(x = "", y = salary_in_usd)) +
 
 
 ```
+
+## Conclusion
