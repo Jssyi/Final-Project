@@ -3,7 +3,7 @@
 #### Jesse Dolan, Bela Banegas, Jennifer Godbersen
 
 ## Introduction
-With the advent of the internet, the ubiquity of technology, and the growth in companys' interest in utilizing consumer data, the fairly recent field of data science has become a hot topic. Data science is an attractive field for analytical thinkers who can enjoy problem solving, finding insights, presenting findings, and enjoying the benefits of the field (flexibility in modality, growing job market). As students hoping to pursue careers in data science, we were interested in learning recent trends in data science salaries in order to be fully informed when looking for our first full-time jobs. 
+With the ubiquity of technology in our everyday lives and the growing ability to extract large amounts of data from it, companies' and governments' interest in utilizing consumer data has grown. As a result, the fairly recent field of data science has become a hot topic. Data science is an attractive field for analytical thinkers who enjoy problem-solving, discovering insights, presenting findings, and enjoying the touted benefits of the field (flexibility in modality, growing job market). As students hoping to pursue careers in data science, we were interested in learning recent trends in data science salaries in order to be fully informed when looking for our first full-time jobs. 
 
 The main question we were looking to answer is: What variables affect data science salaries?
 
