@@ -170,7 +170,7 @@ ggplot(salary_over_time, aes(x = work_year, y = median_salary)) +
 
 [![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/mediansalaryovertime.png)
 
-## Discussion: 
+#### Discussion: 
 
 The line graph illustrates the median salary in USD across five years, from 2020 to 2024. From 2020 to
 2022, there is a consistent upward trend in median salaries, suggesting a period of salary growth likely
@@ -218,7 +218,7 @@ ggplot(salary_over_time, aes(x = work_year, y = median_salary, color = company_s
 ```
 [![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/mediansalarycompany.png)
 
-## Discussion: 
+#### Discussion: 
 
 The graph presents how median salaries fluctuate according to company size over the course of five years,
 spanning from 2020 to 2024. There are three distinct categories: large (L), medium (M), and small (S)
@@ -268,6 +268,7 @@ ggplot(salary_summary, aes(x = reorder(company_location, median_salary), y = med
 ```
 ![image](https://github.com/Jssyi/Final-Project/assets/158086989/d0c67af1-359a-4cf5-bcde-f1607844cb30)
 
+#### Discussion: 
 The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately \$300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
 
 Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about \$150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
@@ -313,6 +314,7 @@ ggplot(median_salary, aes(x = work_year, y = median_salary, group = experience_l
 ```
 ![image](https://github.com/Jssyi/Final-Project/assets/158086989/a1e29a3a-08b6-4162-b7b6-614cdcff354c)
 
+#### Discussion: 
 
 The graph displays the median salary for data science roles across four experience levels—Entry-Level, Mid-Level, Senior, and Executive—from 2020 to 2024. As expected, the salaries increase with experience, with Entry-Level consistently earning the least and Executive earning the most. This trend remains consistent throughout the years plotted, indicating a clear progression in compensation as professionals advance in their careers. The gap between the different levels is significant.
 
@@ -347,6 +349,8 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
 
 ### RQ6: Salary by Remote Ratio and Company Size
 
+Initially, we looked solely are remote ratio and its relationship to salary, but upon receiving feedback from the professor, we realized that company size may have an influence on remote ratio policies. Because of this, we decided to examine the interaction of remote ratio, company size, and salary.
+
 ```{r echo=TRUE}
 # Convert remote_ratio to factor with specified levels
 df$remote_ratio <- factor(df$remote_ratio, levels = c(0, 50, 100))
@@ -362,6 +366,10 @@ print(summary(df$remote_ratio))
 
 ```
 [![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/table.png)
+
+#### Discussion: 
+
+As shown in the table above, there were a significantly larger number of medium-sized companies in the database. We were interested in looking at the count of in-person, hybrid, and remote jobs for each company size, but due to the very different scales we decided to display the data in a 100% stacked bar chart, as shown in the plot below. 
 
 ```{r echo=TRUE}
 # Load necessary library
@@ -389,6 +397,10 @@ ggplot(summary_df, aes(x = company_size, y = prop, fill = remote_ratio)) +
 ```
 [![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/stackedbarchart.png)
 
+#### Discussion: 
+
+In the 100% stacked bar chart, we can observe slightly different patterns by company size. Small and large companies had large ratios of hybrid jobs, and small companies had a higher ratio of totally remote jobs (nearly twice as many as large companies). This may be due to a data scientist working independently for a small company as opposed to on a collaborative team for a medium or large company. Still, all company sizes had a considerable proportion of remote and hybrid positions (all were at least 40% combined remote/hybrid). 
+
 ```{r echo=TRUE}
 # Calculate count of jobs for each combination of time, remote_ratio, and company_size
 job_counts <- aggregate(job_title ~ work_year + remote_ratio + company_size, data = df, FUN = length)
@@ -410,6 +422,10 @@ ggplot(job_counts, aes(x = work_year, y = job_title, group = remote_ratio, color
 
 ```
 [![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/jobsovertime.png)
+
+#### Discussion: 
+
+The next relationship we wanted to look at was the number of jobs by remote ratio over the last 5 years. It should be noted that the dataset was updated two months ago, so data from 2024 may not be complete. With that in mind, it appears that the number of jobs in the dataset is generally increasing over time. It appears that there is not a large growth in the number of hybrid jobs in any three category, but in-person and remote jobs do seem to be growing (at least by the end of 2023, the last full-year the data was updated). 
 
 ```{r echo=TRUE}
 # Convert time to factor if it's not already
@@ -437,6 +453,10 @@ ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_rati
 ```
 [![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salaryovertime.png)
 
+#### Discussion: 
+
+Next, we wanted to look at the median salary over time for the different remote ratios in different company sizes. We can see that salaries for hybrid positions appear to be decreasing in medium and large companies, but increasing in small companies. In-person and remote salaries tended to have similar relationships in small and medium companies, in large companies they appear to be inverted (with median salary of remote positions decreasing while in-person median salary increased from 2022-2023). For the incomplete year of 2024, the median salary of remote jobs is rising, while the median salary of in-person jobs is declining. It would be very interesting to see if this trend continues, or if it is due to incomplete data.
+
 ```{r echo=TRUE}
 # Create the horizontally rotated box plot with angled x-axis labels, no legend, and custom colors
 ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
@@ -455,4 +475,16 @@ ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
 ```
 [![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/remoteratiosizedistribution.png)
 
+#### Discussion: 
+
+
 ## Conclusion
+
+
+In conclusion, our examination of median salary trends in the data science domain has revealed noteworthy patterns and areas for further exploration. The consistent upward trajectory in median salaries from 2020 to 2022 suggests a period of substantial growth, potentially fueled by factors such as expanding industries and heightened demand for specialized skills. However, the stabilization observed around 2023 and 2024 prompts inquiries into potential saturation points or shifts in market dynamics. Furthermore, the disparities in median salaries across different company sizes and experience levels underscore the nuanced nature of compensation dynamics within the field.
+
+Moving forward, future research endeavors could focus on several key areas. Firstly, delving deeper into the changes in salary trends over time, particularly during pivotal periods such as the pandemic years, could provide valuable insights into evolving compensation dynamics and their underlying drivers. Additionally, exploring the impact of additional factors, such as geographical location or educational background, on salary variations could offer a more comprehensive understanding of the factors influencing compensation levels in data science roles.
+
+Moreover, investigating the interaction between remote work policies, company size, and salary could shed light on emerging trends in remote work practices and their implications for compensation strategies. By examining how these factors intersect and influence each other, we can better understand the evolving landscape of work arrangements and their impact on salary structures.
+
+Overall, our findings highlight the need for ongoing research to deepen our understanding of salary trends in the data science field. By addressing these questions, we can inform strategic decision-making and contribute to the development of more equitable and competitive compensation practices within the industry.
