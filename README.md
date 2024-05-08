@@ -3,10 +3,22 @@
 #### Jesse Dolan, Bela Banegas, Jennifer Godbersen
 
 ## Introduction
+With the advent of the internet, the ubiquity of technology, and the growth in companys' interest in utilizing consumer data, the fairly recent field of data science has become a hot topic. Data science is an attractive field for analytical thinkers who can enjoy problem solving, finding insights, presenting findings, and enjoying the benefits of the field (flexibility in modality, growing job market). As students hoping to pursue careers in data science, we were interested in learning recent trends in data science salaries in order to be fully informed when looking for our first full-time jobs. 
 
+The main question we were looking to answer is: What variables affect data science salaries?
+
+To attempt to answer this, we explored six different research questions: 
+RQ1: How have data science salaries overall changed over time?
+RQ2: How does company size affect salary? 
+RQ3: How does experience level affect salary?
+RQ4: How does company location affect salary?
+RQ5: How does job title affect salary?
+RQ6: How does remote ratio (in-person, hybrid, or remote) affect salary? Does this relationship appear to be different for companies of different sizes?
 
 ## Data 
-This data set includes information about data science salaries. Variables include: year, experience level, employment type (full-time, part-time, contract, freelance), job title, salary, salary currency, salary in usd, employee residence, remote ratio (amount of work done remotely), and company location.
+This data set includes information about data science salaries. We received this data from Kaggle and has 13732 rows <https://www.kaggle.com/datasets/mexwell/data-science-salary-data>. It was originally retrieved (by Kaggle user Mexwell) from <https://ai-jobs.net/>. This site acts as a job board for data science positions, and it collects various information on these positions, employers, and employees. 
+
+Variables include: year, experience level, employment type (full-time, part-time, contract, freelance), job title, salary, salary currency, salary in usd, employee residence, remote ratio (amount of work done remotely), and company location.
 
 ```{r}
 file_path <- "salaries.csv"
@@ -32,9 +44,7 @@ There are no empty rows, columns, or NA values at all. We didn't need to sort an
 
 ## Variables
 
-Our data includes 10 different variables listed here.
-
-Variables (10):
+Our data includes 10 different variables listed below. All are functionally categorical except for the salary and salary_in_usd variables. For our work, we chose to use the salary_in_usd variable and ignore the original unconverted salary variable.
 
 work_year -\> (2020-2024)
 
@@ -54,9 +64,8 @@ company_location -\> (Company location by country)
 
 company_size -\> (Company size, either S, M or L)
 
-We recieved this data from kaggle and it has 13732 rows
+There was a lack of information on the Kaggle site and <https://ai-jobs.net/> about what qualifies as a small, medium, or large company. 
 
-<https://www.kaggle.com/datasets/mexwell/data-science-salary-data>
 
 ## Results
 
@@ -121,6 +130,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  
 ```
+###   Salary by Company Location
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
