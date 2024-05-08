@@ -141,46 +141,6 @@ I instead included IQR rather than standard deviation.
 
 ###  RQ1 : Attempt 2 
 
-```{r echo=TRUE}
-library(ggplot2)
-library(dplyr)
-# Group by year and company size, and calculate the mean salary
-salary_over_time <- df %>%
-  group_by(work_year, company_size) %>%
-  summarize(
-    mean_salary = mean(salary_in_usd),
-    sd_salary = sd(salary_in_usd)
-  )
-
-# Define colors and labels for each company size
-company_size_labels <- c("small" = "Small", "medium" = "Medium", "large" = "Large")
-company_size_colors <- c("small" = "blue", "medium" = "red", "large" = "yellow")
-
-
-ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_size, linetype = company_size)) +
-  geom_line() +
-  geom_point() +
-  geom_errorbar(aes(ymin = mean_salary - sd_salary, ymax = mean_salary + sd_salary), width = 0.2) +
-  labs(
-    title = "Average Salary Over Time by Company Size",
-    x = "Year",
-    y = "Mean Salary ($)",
-    color = "Company Size",
-    linetype = "Company Size"
-  ) +
-  scale_color_manual(values = company_size_colors, labels = company_size_labels) +
-  scale_linetype_manual(values = c("solid", "dashed", "dotted"), labels = company_size_labels) +
-  theme_minimal() +
-  scale_y_continuous(labels = scales::comma)  
-```
-
-
-After discussing the previous graphs in our final presentation I decided to make changes to the graphs
-to include median salary rather than mean. This will address issues of extreme variance and outliers while 
-maintaining the same relationships. Additionally, we received feedback that displaying a standard deviation
-of one may not truly add to the information of the graph. Keeping in mind the importance of variability, 
-I instead included IQR rather than standard deviation. 
-
 ```{r}
 # Group by year and calculate the median salary and IQR
 salary_over_time <- df %>%
@@ -223,7 +183,7 @@ IQRs imply greater dispersion in salaries, offering valuable insights for furthe
 science professionals. Overall, this graph provides a comprehensive view of salary trends over time,
 enabling analysis, prediction, and understanding of compensation dynamics within the dataset's context.
 
-Second graph (modified with same adjustments)
+###  RQ2 : Attempt 2 
 
 ```{r}
 # Group by year and company size, and calculate the median salary and IQR
@@ -273,9 +233,6 @@ salaries across company sizes, with larger enterprises consistently offering hig
 Ultimately, the graph serves as a valuable resource for job seekers, HR professionals, and economists
 alike, offering critical insights into the multifaceted dynamics of compensation trends relative to company
 size.
-
-
-
 
 
 ###   RQ3: Salary by Company Location
