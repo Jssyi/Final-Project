@@ -227,6 +227,8 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 
 ```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salarybyjobtitle.png)
+
 
 ### Salary by Remote Ratio and Company Size
 
@@ -244,7 +246,7 @@ cat("\nCounts for each level of remote_ratio:\n")
 print(summary(df$remote_ratio))
 
 ```
-
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/table.png)
 
 ```{r echo=TRUE}
 # Load necessary library
@@ -270,6 +272,7 @@ ggplot(summary_df, aes(x = company_size, y = prop, fill = remote_ratio)) +
   theme_minimal()
 
 ```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/stackedbarchart.png)
 
 ```{r echo=TRUE}
 # Calculate count of jobs for each combination of time, remote_ratio, and company_size
@@ -291,6 +294,7 @@ ggplot(job_counts, aes(x = work_year, y = job_title, group = remote_ratio, color
   theme(axis.text.x = element_text(angle = 45, hjust = 0.5, vjust = 0.5))  # Rotate y-axis labels vertically
 
 ```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/jobsovertime.png)
 
 ```{r echo=TRUE}
 # Convert time to factor if it's not already
@@ -316,6 +320,7 @@ ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_rati
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salaryovertime.png)
 
 ```{r echo=TRUE}
 # Create the horizontally rotated box plot with angled x-axis labels, no legend, and custom colors
@@ -333,5 +338,6 @@ ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
         legend.position = "none")  # Remove legend
 
 ```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/remoteratiosizedistribution.png)
 
 ## Conclusion
