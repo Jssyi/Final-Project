@@ -8,11 +8,14 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-# Introduction
 
-Research Project Title: Data Science Salaries
+## Introduction
 
-This data set includes information about data science salaries. Variables include: year, experience level, employment type (full-time, part-time, contract, freelance), job title, salary, salary currency, salary in usd, employee residence, remote ratio (amount of work done remotely), and company location.
+With the ubiquity of technology in our everyday lives and the growing ability to extract large amounts of data from it, companies' and governments' interest in utilizing consumer data has grown. As a result, the fairly recent field of data science has become a hot topic. Data science is an attractive field for analytical thinkers who enjoy problem-solving, discovering insights, presenting findings, and enjoying the touted benefits of the field (flexibility in modality, growing job market). As students hoping to pursue careers in data science, we were interested in learning recent trends in data science salaries in order to be fully informed when looking for our first full-time jobs.
+
+The main question we were looking to answer is: What variables affect data science salaries?
+
+To attempt to answer this, we explored six different research questions: - RQ1: How have data science salaries overall changed over time? - RQ2: How does company size affect salary? - RQ3: How does company location affect salary? - RQ4: How does experience level affect salary? - RQ5: How does job title affect salary? - RQ6: How does remote ratio (in-person, hybrid, or remote) affect salary? Does this relationship appear to be different for companies of different sizes?
 
 ```{r}
 file_path <- "salaries.csv"
@@ -31,17 +34,38 @@ if (any(is.na(df))) {
   print("There are no NA values in the dataframe.")
 }
 ```
-# Data
 
-## Cleaning and Sorting
+## Data
+
+This data set includes information about data science salaries. We received this data from Kaggle and has 13732 rows <https://www.kaggle.com/datasets/mexwell/data-science-salary-data>. It was originally retrieved (by Kaggle user Mexwell) from <https://ai-jobs.net/>. This site acts as a job board for data science positions, and it collects various information on these positions, employers, and employees.
+
+Variables include: year, experience level, employment type (full-time, part-time, contract, freelance), job title, salary, salary currency, salary in usd, employee residence, remote ratio (amount of work done remotely), and company location.
+
+```{r}
+file_path <- "salaries.csv"
+
+df <- read.csv(file_path)
+
+head(df)
+
+```
+
+```{r}
+empty_rows <- df[!complete.cases(df), ]
+if (any(is.na(df))) {
+  print("There are NA values in the dataframe.")
+} else {
+  print("There are no NA values in the dataframe.")
+}
+```
 
 Data cleaning steps:
 
-There are no empty rows, columns, or NA values at all. We didn't need to sort anything out because we included all necessary sorting inside of our visualization steps. Our data includes 10 different variables listed here.
+There are no empty rows, columns, or NA values at all. We didn't need to sort anything out because we included all necessary sorting inside of our visualization steps.
 
 ## Variables
 
-Variables (10):
+Our data includes 10 different variables listed below. All are functionally categorical except for the salary and salary_in_usd variables. For our work, we chose to use the salary_in_usd variable and ignore the original unconverted salary variable.
 
 work_year -\> (2020-2024)
 
@@ -61,17 +85,11 @@ company_location -\> (Company location by country)
 
 company_size -\> (Company size, either S, M or L)
 
-We recieved this data from kaggle and it has 13732 rows
+There was a lack of information on the Kaggle site and <https://ai-jobs.net/> about what qualifies as a small, medium, or large company.
 
-<https://www.kaggle.com/datasets/mexwell/data-science-salary-data>
+## Results
 
-Our current project idea is to identify the current salaries for people in our field. Particular variables of interest are year, experience level, job title, remote work ratio, and company location.
-
-# Results
-
-Our results were found by observing the following relationships:
-
--   Salary over time (Bela)
+### RQ1: Salary Over Time
 
 ```{r echo=TRUE}
 library(ggplot2)
@@ -98,7 +116,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
 
--   Salary by company size (Bela)
+### RQ2: Salary by Company Size
 
 ```{r echo=TRUE}
 library(ggplot2)
@@ -133,12 +151,9 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
   scale_y_continuous(labels = scales::comma)  
 ```
 
+After discussing the previous graphs in our final presentation I decided to make changes to the graphs to include median salary rather than mean. This will address issues of extreme variance and outliers while maintaining the same relationships. Additionally, we received feedback that displaying a standard deviation of one may not truly add to the information of the graph. Keeping in mind the importance of variability, I instead included IQR rather than standard deviation.
 
-After discussing the previous graphs in our final presentation I decided to make changes to the graphs
-to include median salary rather than mean. This will address issues of extreme variance and outliers while 
-maintaining the same relationships. Additionally, we received feedback that displaying a standard deviation
-of one may not truly add to the information of the graph. Keeping in mind the importance of variability, 
-I instead included IQR rather than standard deviation. 
+### RQ1 : Attempt 2
 
 ```{r}
 # Group by year and calculate the median salary and IQR
@@ -166,20 +181,12 @@ ggplot(salary_over_time, aes(x = work_year, y = median_salary)) +
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
-## Discussion: 
 
-The line graph illustrates the median salary in USD across five years, from 2020 to 2024. From 2020 to
-2022, there is a consistent upward trend in median salaries, suggesting a period of salary growth likely
-influenced by factors such as industry expansion and heightened demand. However, around 2023 and 2024, the
-median salary appears to stabilize, indicating a potential saturation point or market equilibrium. This
-stabilization prompts questions for data scientists regarding the underlying causes, whether they stem from
-market dynamics, policy changes, or other factors. Additionally, the error bars at each data point
-represent the interquartile range (IQR), showcasing the variability in salaries around the median. Larger
-IQRs imply greater dispersion in salaries, offering valuable insights for further exploration by data
-science professionals. Overall, this graph provides a comprehensive view of salary trends over time,
-enabling analysis, prediction, and understanding of compensation dynamics within the dataset's context.
+#### Discussion:
 
-Second graph (modified with same adjustments)
+The line graph illustrates the median salary in USD across five years, from 2020 to 2024. From 2020 to 2022, there is a consistent upward trend in median salaries, suggesting a period of salary growth likely influenced by factors such as industry expansion and heightened demand. However, around 2023 and 2024, the median salary appears to stabilize, indicating a potential saturation point or market equilibrium. This stabilization prompts questions for data scientists regarding the underlying causes, whether they stem from market dynamics, policy changes, or other factors. Additionally, the error bars at each data point represent the interquartile range (IQR), showcasing the variability in salaries around the median. Larger IQRs imply greater dispersion in salaries, offering valuable insights for further exploration by data science professionals. Overall, this graph provides a comprehensive view of salary trends over time, enabling analysis, prediction, and understanding of compensation dynamics within the dataset's context.
+
+### RQ2 : Attempt 2
 
 ```{r}
 # Group by year and company size, and calculate the median salary and IQR
@@ -212,24 +219,13 @@ ggplot(salary_over_time, aes(x = work_year, y = median_salary, color = company_s
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)
 ```
-## Discussion: 
 
-The graph presents how median salaries fluctuate according to company size over the course of five years,
-spanning from 2020 to 2024. There are three distinct categories: large (L), medium (M), and small (S)
-companies, each represented by solid, dashed, and dotted lines. Large companies exhibit a steady upward
-trajectory in median salary over the entire duration, indicating consistent growth for employees within
-this category. Conversely, medium-sized companies display a similar overall trend of increasing median
-salaries, with noticeable fluctuations. These fluctuations likely stem from various factors such as market
-dynamics, industry-specific shifts, or internal company policies. Meanwhile, small companies portray a more
-unstable pattern, with median salaries oscillating throughout the years. Such variability may reflect the
-challenges and constraints of smaller businesses. The graph displays significant disparities in median \
-salaries across company sizes, with larger enterprises consistently offering higher compensation. 
-Ultimately, the graph serves as a valuable resource for job seekers, HR professionals, and economists
-alike, offering critical insights into the multifaceted dynamics of compensation trends relative to company
-size.
+#### Discussion:
 
+The graph presents how median salaries fluctuate according to company size over the course of five years, spanning from 2020 to 2024. There are three distinct categories: large (L), medium (M), and small (S) companies, each represented by solid, dashed, and dotted lines. Large companies exhibit a steady upward trajectory in median salary over the entire duration, indicating consistent growth for employees within this category. Conversely, medium-sized companies display a similar overall trend of increasing median salaries, with noticeable fluctuations. These fluctuations likely stem from various factors such as market dynamics, industry-specific shifts, or internal company policies. Meanwhile, small companies portray a more unstable pattern, with median salaries oscillating throughout the years. Such variability may reflect the challenges and constraints of smaller businesses. The graph displays significant disparities in median\
+salaries across company sizes, with larger enterprises consistently offering higher compensation. Ultimately, the graph serves as a valuable resource for job seekers, HR professionals, and economists alike, offering critical insights into the multifaceted dynamics of compensation trends relative to company size.
 
--   Salary by location - country (Jesse)
+### RQ3: Salary by Company Location
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
@@ -261,13 +257,13 @@ ggplot(salary_summary, aes(x = reorder(company_location, median_salary), y = med
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 ```
 
-## Discussion: 
+#### Discussion:
 
 The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately \$300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
 
 Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about \$150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
 
--   Salary by experience (Jesse)
+### RQ4: Salary by Experience
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
@@ -307,17 +303,31 @@ ggplot(median_salary, aes(x = work_year, y = median_salary, group = experience_l
 
 ```
 
-## Discussion: 
+#### Discussion:
 
 The graph displays the median salary for data science roles across four experience levels—Entry-Level, Mid-Level, Senior, and Executive—from 2020 to 2024. As expected, the salaries increase with experience, with Entry-Level consistently earning the least and Executive earning the most. This trend remains consistent throughout the years plotted, indicating a clear progression in compensation as professionals advance in their careers. The gap between the different levels is significant.
 
 Over the years, the graph shows a general upward trend in median salary across all experience levels, although the rate of increase varies. The difference between Mid-Level and Senior is notable, with Senior positions commanding a much higher salary, reflecting the added responsibility and expertise required at that level. The consistency in salary growth over the period indicates a robust market for data science roles, with experienced professionals enjoying significant compensation advantages. Despite minor fluctuations, the overall upward trajectory suggests a positive outlook for career progression in the data science field.
 
--   Salary by job title (Jennifer)
+### RQ5: Salary by Job Title
 
 ```{r echo=TRUE, message=TRUE, warning=TRUE}
-# Reorder job titles from greatest to least based on median salary
-df_filtered$job_title <- factor(df_filtered$job_title, levels = median_salaries$job_title[order(-median_salaries$median_salary)])
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+# Calculate unique job titles with count > 50
+unique_job_titles <- df %>%
+  filter(!is.na(job_title)) %>%  # Filter out missing values
+  group_by(job_title) %>%
+  summarize(job_count = n()) %>%
+  filter(job_count > 50) %>%
+  pull(job_title)  # Extract unique job titles as vector
+
+# Filter the original dataframe for plotting
+df_filtered <- df %>%
+  filter(!is.na(job_title)) %>%  # Filter out missing values
+  filter(job_title %in% unique_job_titles)
 
 # Create the plot using the filtered dataframe
 ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
@@ -338,7 +348,13 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
 
 ```
 
--   Salary by remote ratio (Jennifer)
+#### Discussion:
+
+To investigate the highest-paying job titles in data science, we took the titles with over 50 entries in the data set (others tended to be slight variations or mispellings of more popular categories) and examined the salary distributions. The red line indicates the average median salary across all positions in the data set, and the x-axis is organized from highest median salary to lowest. It can be seen that the highest median salaries tend to belong to the job title of Applied Scientist, Data Science Manager, ML Engineer/Scientist, Research Scientist/Engineer, and AI Engineer. Lower-paying job titles included analyst positions such as Business Intelligence Analyst, Data Analyst, and Research Analyst. The positions with higher median salaries tended to have more and greater outliers (except for the very highest two), with some up to \$800,000 USD.
+
+### RQ6: Salary by Remote Ratio and Company Size
+
+Initially, we looked solely are remote ratio and its relationship to salary, but upon receiving feedback from the professor, we realized that company size may have an influence on remote ratio policies. Because of this, we decided to examine the interaction of remote ratio, company size, and salary.
 
 ```{r echo=TRUE}
 
@@ -356,6 +372,9 @@ print(summary(df$remote_ratio))
 
 ```
 
+#### Discussion:
+
+As shown in the table above, there were a significantly larger number of medium-sized companies in the database. We were interested in looking at the count of in-person, hybrid, and remote jobs for each company size, but due to the very different scales we decided to display the data in a 100% stacked bar chart, as shown in the plot below.
 
 ```{r echo=TRUE}
 
@@ -383,6 +402,10 @@ ggplot(summary_df, aes(x = company_size, y = prop, fill = remote_ratio)) +
 
 ```
 
+#### Discussion:
+
+In the 100% stacked bar chart, we can observe slightly different patterns by company size. Small and large companies had large ratios of hybrid jobs, and small companies had a higher ratio of totally remote jobs (nearly twice as many as large companies). This may be due to a data scientist working independently for a small company as opposed to on a collaborative team for a medium or large company. Still, all company sizes had a considerable proportion of remote and hybrid positions (all were at least 40% combined remote/hybrid).
+
 ```{r echo=TRUE}
 
 # Calculate count of jobs for each combination of time, remote_ratio, and company_size
@@ -403,6 +426,10 @@ ggplot(job_counts, aes(x = work_year, y = job_title, group = remote_ratio, color
   facet_wrap(~ company_size, scales = "free_y") +  # Facet by company_size variable with free y-axis scales
   theme(axis.text.x = element_text(angle = 45, hjust = 0.5, vjust = 0.5))  # Rotate y-axis labels vertically
 ```
+
+#### Discussion:
+
+The next relationship we wanted to look at was the number of jobs by remote ratio over the last 5 years. It should be noted that the dataset was updated two months ago, so data from 2024 may not be complete. With that in mind, it appears that the number of jobs in the dataset is generally increasing over time. It appears that there is not a large growth in the number of hybrid jobs in any three category, but in-person and remote jobs do seem to be growing (at least by the end of 2023, the last full year the data was updated).
 
 ```{r echo=TRUE}
 
@@ -430,6 +457,10 @@ ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_rati
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+#### Discussion:
+
+Next, we wanted to look at the median salary over time for the different remote ratios in different company sizes. We can see that salaries for hybrid positions appear to be decreasing in medium and large companies, but increasing in small companies. In-person and remote salaries tended to have similar relationships in small and medium companies, in large companies they appear to be inverted (with median salary of remote positions decreasing while in-person median salary increased from 2022-2023). For the incomplete year of 2024, the median salary of remote jobs is rising, while the median salary of in-person jobs is declining. It would be very interesting to see if this trend continues, or if it is due to incomplete data.
+
 ```{r echo=TRUE}
   
 # Create the horizontally rotated box plot with angled x-axis labels, no legend, and custom colors
@@ -448,3 +479,17 @@ ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
 
 
 ```
+
+#### Discussion:
+
+Finally, we wanted to look at the individual distributions of salary by remote ratio and company size. There are some striking differences between the intersections, with in-person and remote positions at medium companies having very high outliers (potentially due to the much larger sample size). Surprisingly, the hybrid positions at large companies also had a notable amount of outliers. The hybrid positions at small and medium companies had very small distributions with no outliers, which may very well be caused by the small sample sizes in these categories. The greatest mean salary belonged to the in-person positions at medium-sized companies, followed by the remote positions at large companies and the in-person positions at large companies.
+
+## Conclusion
+
+In conclusion, our examination of median salary trends in the data science domain has revealed noteworthy patterns and areas for further exploration. The consistent upward trajectory in median salaries from 2020 to 2022 suggests a period of substantial growth, potentially fueled by factors such as expanding industries and heightened demand for specialized skills. However, the stabilization observed around 2023 and 2024 prompts inquiries into potential saturation points or shifts in market dynamics. Furthermore, the disparities in median salaries across different company sizes and experience levels underscore the nuanced nature of compensation dynamics within the field.
+
+Moving forward, future research endeavors could focus on several key areas. Firstly, delving deeper into the changes in salary trends over time, particularly during pivotal periods such as the pandemic years, could provide valuable insights into evolving compensation dynamics and their underlying drivers. Additionally, exploring the impact of additional factors, such as geographical location or educational background, on salary variations could offer a more comprehensive understanding of the factors influencing compensation levels in data science roles.
+
+Moreover, investigating the interaction between remote work policies, company size, and salary could shed light on emerging trends in remote work practices and their implications for compensation strategies. By examining how these factors intersect and influence each other, we can better understand the evolving landscape of work arrangements and their impact on salary structures.
+
+Overall, our findings highlight the need for ongoing research to deepen our understanding of salary trends in the data science field. By addressing these questions, we can inform strategic decision-making and contribute to the development of more equitable and competitive compensation practices within the industry.
