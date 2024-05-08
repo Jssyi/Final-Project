@@ -226,13 +226,11 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
   ) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 
-
 ```
 
 ### Salary by Remote Ratio and Company Size
 
 ```{r echo=TRUE}
-
 # Convert remote_ratio to factor with specified levels
 df$remote_ratio <- factor(df$remote_ratio, levels = c(0, 50, 100))
 df$company_size <- factor(df$company_size, levels = c("S", "M", "L"))
@@ -249,7 +247,6 @@ print(summary(df$remote_ratio))
 
 
 ```{r echo=TRUE}
-
 # Load necessary library
 library(ggplot2)
 library(scales)
@@ -275,7 +272,6 @@ ggplot(summary_df, aes(x = company_size, y = prop, fill = remote_ratio)) +
 ```
 
 ```{r echo=TRUE}
-
 # Calculate count of jobs for each combination of time, remote_ratio, and company_size
 job_counts <- aggregate(job_title ~ work_year + remote_ratio + company_size, data = df, FUN = length)
 
@@ -293,11 +289,10 @@ ggplot(job_counts, aes(x = work_year, y = job_title, group = remote_ratio, color
   theme_minimal() +
   facet_wrap(~ company_size, scales = "free_y") +  # Facet by company_size variable with free y-axis scales
   theme(axis.text.x = element_text(angle = 45, hjust = 0.5, vjust = 0.5))  # Rotate y-axis labels vertically
+
 ```
 
 ```{r echo=TRUE}
-
-
 # Convert time to factor if it's not already
 df$work_year <- as.factor(df$work_year)
 df$work_year <- factor(df$work_year, levels = c("2020", "2021", "2022", "2023", "2024"))
@@ -319,10 +314,10 @@ ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_rati
   theme_minimal() +
   facet_wrap(~ company_size, scales = "free_y") +  # Facet by company_size variable with free y-axis scales
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
 
 ```{r echo=TRUE}
-  
 # Create the horizontally rotated box plot with angled x-axis labels, no legend, and custom colors
 ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
   geom_boxplot() +
@@ -336,7 +331,6 @@ ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
   scale_fill_manual(values = c("skyblue", "skyblue", "skyblue")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "none")  # Remove legend
-
 
 ```
 
