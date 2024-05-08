@@ -160,6 +160,7 @@ ggplot(salary_summary, aes(x = reorder(company_location, median_salary), y = med
   ) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 ```
+![image](https://github.com/Jssyi/Final-Project/assets/158086989/d0c67af1-359a-4cf5-bcde-f1607844cb30)
 
 The graph illustrates the median salary in USD for data science roles across various countries, sorted from lowest to highest. Qatar stands out with the highest median salary, reaching approximately \$300,000. This significant salary suggests that data science roles in Qatar are among the most lucrative globally. The disparity between Qatar and other locations could be due to several factors, including the high demand for specialized skills, cost of living, or market dynamics in the region.
 
@@ -204,6 +205,8 @@ ggplot(median_salary, aes(x = work_year, y = median_salary, group = experience_l
 
 
 ```
+![image](https://github.com/Jssyi/Final-Project/assets/158086989/a1e29a3a-08b6-4162-b7b6-614cdcff354c)
+
 
 The graph displays the median salary for data science roles across four experience levels—Entry-Level, Mid-Level, Senior, and Executive—from 2020 to 2024. As expected, the salaries increase with experience, with Entry-Level consistently earning the least and Executive earning the most. This trend remains consistent throughout the years plotted, indicating a clear progression in compensation as professionals advance in their careers. The gap between the different levels is significant.
 
