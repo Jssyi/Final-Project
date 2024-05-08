@@ -8,12 +8,12 @@ With the ubiquity of technology in our everyday lives and the growing ability to
 The main question we were looking to answer is: What variables affect data science salaries?
 
 To attempt to answer this, we explored six different research questions: 
-RQ1: How have data science salaries overall changed over time?
-RQ2: How does company size affect salary? 
-RQ3: How does experience level affect salary?
-RQ4: How does company location affect salary?
-RQ5: How does job title affect salary?
-RQ6: How does remote ratio (in-person, hybrid, or remote) affect salary? Does this relationship appear to be different for companies of different sizes?
+-   RQ1: How have data science salaries overall changed over time?
+-   RQ2: How does company size affect salary? 
+-   RQ3: How does company location affect salary?
+-   RQ4: How does experience level affect salary?
+-   RQ5: How does job title affect salary?
+-   RQ6: How does remote ratio (in-person, hybrid, or remote) affect salary? Does this relationship appear to be different for companies of different sizes?
 
 ## Data 
 This data set includes information about data science salaries. We received this data from Kaggle and has 13732 rows <https://www.kaggle.com/datasets/mexwell/data-science-salary-data>. It was originally retrieved (by Kaggle user Mexwell) from <https://ai-jobs.net/>. This site acts as a job board for data science positions, and it collects various information on these positions, employers, and employees. 
@@ -69,7 +69,7 @@ There was a lack of information on the Kaggle site and <https://ai-jobs.net/> ab
 
 ## Results
 
-###   Salary Over Time
+###   RQ1: Salary Over Time
 
 ```{r echo=TRUE}
 library(ggplot2)
@@ -96,7 +96,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
 
-###   Salary by Company Size
+###   RQ2: Salary by Company Size
 
 ```{r echo=TRUE}
 library(ggplot2)
@@ -130,7 +130,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  
 ```
-###   Salary by Company Location
+###   RQ3: Salary by Company Location
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
@@ -167,7 +167,7 @@ The graph illustrates the median salary in USD for data science roles across var
 
 Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about \$150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
 
-###   Salary by Experience
+###   RQ4: Salary by Experience
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
@@ -214,7 +214,7 @@ The graph displays the median salary for data science roles across four experien
 Over the years, the graph shows a general upward trend in median salary across all experience levels, although the rate of increase varies. The difference between Mid-Level and Senior is notable, with Senior positions commanding a much higher salary, reflecting the added responsibility and expertise required at that level. The consistency in salary growth over the period indicates a robust market for data science roles, with experienced professionals enjoying significant compensation advantages. Despite minor fluctuations, the overall upward trajectory suggests a positive outlook for career progression in the data science field.
 
 
-### Salary by Job Title
+### RQ5: Salary by Job Title
 
 ```{r echo=TRUE, message=TRUE, warning=TRUE}
 # Reorder job titles from greatest to least based on median salary
@@ -240,7 +240,7 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
 [![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salarybyjobtitle.png)
 
 
-### Salary by Remote Ratio and Company Size
+### RQ6: Salary by Remote Ratio and Company Size
 
 ```{r echo=TRUE}
 # Convert remote_ratio to factor with specified levels
