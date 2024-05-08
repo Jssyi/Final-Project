@@ -95,6 +95,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
+[![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/avgsalary(1).png)
 
 ###   RQ2: Salary by Company Size
 
@@ -130,6 +131,153 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  
 ```
+[![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/avgsalarycompany(1).png)
+
+After discussing the previous graphs in our final presentation I decided to make changes to the graphs
+to include median salary rather than mean. This will address issues of extreme variance and outliers while 
+maintaining the same relationships. Additionally, we received feedback that displaying a standard deviation
+of one may not truly add to the information of the graph. Keeping in mind the importance of variability, 
+I instead included IQR rather than standard deviation. 
+
+###  RQ1 : Attempt 2 
+
+```{r echo=TRUE}
+library(ggplot2)
+library(dplyr)
+# Group by year and company size, and calculate the mean salary
+salary_over_time <- df %>%
+  group_by(work_year, company_size) %>%
+  summarize(
+    mean_salary = mean(salary_in_usd),
+    sd_salary = sd(salary_in_usd)
+  )
+
+# Define colors and labels for each company size
+company_size_labels <- c("small" = "Small", "medium" = "Medium", "large" = "Large")
+company_size_colors <- c("small" = "blue", "medium" = "red", "large" = "yellow")
+
+
+ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_size, linetype = company_size)) +
+  geom_line() +
+  geom_point() +
+  geom_errorbar(aes(ymin = mean_salary - sd_salary, ymax = mean_salary + sd_salary), width = 0.2) +
+  labs(
+    title = "Average Salary Over Time by Company Size",
+    x = "Year",
+    y = "Mean Salary ($)",
+    color = "Company Size",
+    linetype = "Company Size"
+  ) +
+  scale_color_manual(values = company_size_colors, labels = company_size_labels) +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted"), labels = company_size_labels) +
+  theme_minimal() +
+  scale_y_continuous(labels = scales::comma)  
+```
+
+
+After discussing the previous graphs in our final presentation I decided to make changes to the graphs
+to include median salary rather than mean. This will address issues of extreme variance and outliers while 
+maintaining the same relationships. Additionally, we received feedback that displaying a standard deviation
+of one may not truly add to the information of the graph. Keeping in mind the importance of variability, 
+I instead included IQR rather than standard deviation. 
+
+```{r}
+# Group by year and calculate the median salary and IQR
+salary_over_time <- df %>%
+  group_by(work_year) %>%
+  summarize(
+    median_salary = median(salary_in_usd),
+    q1 = quantile(salary_in_usd, 0.25),
+    q3 = quantile(salary_in_usd, 0.75)
+  )
+
+# Calculate IQR
+salary_over_time$IQR <- salary_over_time$q3 - salary_over_time$q1
+
+# Plotting
+ggplot(salary_over_time, aes(x = work_year, y = median_salary)) +
+  geom_line(color = "blue") +
+  geom_point(color = "blue") +
+  geom_errorbar(aes(ymin = median_salary - IQR, ymax = median_salary + IQR), width = 0.2) +
+  labs(
+    title = "Median Salary Over Time with IQR",
+    x = "Year",
+    y = "Median Salary ($)"
+  ) +
+  theme_minimal() +
+  scale_y_continuous(labels = scales::comma)  # for readability use comma format
+```
+
+[![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/mediansalaryovertime.png)
+
+## Discussion: 
+
+The line graph illustrates the median salary in USD across five years, from 2020 to 2024. From 2020 to
+2022, there is a consistent upward trend in median salaries, suggesting a period of salary growth likely
+influenced by factors such as industry expansion and heightened demand. However, around 2023 and 2024, the
+median salary appears to stabilize, indicating a potential saturation point or market equilibrium. This
+stabilization prompts questions for data scientists regarding the underlying causes, whether they stem from
+market dynamics, policy changes, or other factors. Additionally, the error bars at each data point
+represent the interquartile range (IQR), showcasing the variability in salaries around the median. Larger
+IQRs imply greater dispersion in salaries, offering valuable insights for further exploration by data
+science professionals. Overall, this graph provides a comprehensive view of salary trends over time,
+enabling analysis, prediction, and understanding of compensation dynamics within the dataset's context.
+
+Second graph (modified with same adjustments)
+
+```{r}
+# Group by year and company size, and calculate the median salary and IQR
+salary_over_time <- df %>%
+  group_by(work_year, company_size) %>%
+  summarize(
+    median_salary = median(salary_in_usd),
+    q1_salary = quantile(salary_in_usd, 0.25),
+    q3_salary = quantile(salary_in_usd, 0.75)
+  )
+
+# Define colors and labels for each company size
+company_size_labels <- c("small" = "Small", "medium" = "Medium", "large" = "Large")
+company_size_colors <- c("small" = "blue", "medium" = "red", "large" = "yellow")
+
+# Create the plot
+ggplot(salary_over_time, aes(x = work_year, y = median_salary, color = company_size, linetype = company_size)) +
+  geom_line() +
+  geom_point() +
+  geom_errorbar(aes(ymin = q1_salary, ymax = q3_salary), width = 0.2) +  # Use IQR for error bars
+  labs(
+    title = "Median Salary Over Time by Company Size",
+    x = "Year",
+    y = "Median Salary ($)",
+    color = "Company Size",
+    linetype = "Company Size"
+  ) +
+  scale_color_manual(values = company_size_colors, labels = company_size_labels) +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted"), labels = company_size_labels) +
+  theme_minimal() +
+  scale_y_continuous(labels = scales::comma)
+```
+[![image](https://github.com/Jssyi/Final-Project/blob/e741e872a7b804b7767c0a677429938fa56984ed/mediansalarycompany.png)
+
+## Discussion: 
+
+The graph presents how median salaries fluctuate according to company size over the course of five years,
+spanning from 2020 to 2024. There are three distinct categories: large (L), medium (M), and small (S)
+companies, each represented by solid, dashed, and dotted lines. Large companies exhibit a steady upward
+trajectory in median salary over the entire duration, indicating consistent growth for employees within
+this category. Conversely, medium-sized companies display a similar overall trend of increasing median
+salaries, with noticeable fluctuations. These fluctuations likely stem from various factors such as market
+dynamics, industry-specific shifts, or internal company policies. Meanwhile, small companies portray a more
+unstable pattern, with median salaries oscillating throughout the years. Such variability may reflect the
+challenges and constraints of smaller businesses. The graph displays significant disparities in median \
+salaries across company sizes, with larger enterprises consistently offering higher compensation. 
+Ultimately, the graph serves as a valuable resource for job seekers, HR professionals, and economists
+alike, offering critical insights into the multifaceted dynamics of compensation trends relative to company
+size.
+
+
+
+
+
 ###   RQ3: Salary by Company Location
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
