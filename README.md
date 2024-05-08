@@ -428,7 +428,7 @@ ggplot(job_counts, aes(x = work_year, y = job_title, group = remote_ratio, color
 
 #### Discussion: 
 
-The next relationship we wanted to look at was the number of jobs by remote ratio over the last 5 years. It should be noted that the dataset was updated two months ago, so data from 2024 may not be complete. With that in mind, it appears that the number of jobs in the dataset is generally increasing over time. It appears that there is not a large growth in the number of hybrid jobs in any three category, but in-person and remote jobs do seem to be growing (at least by the end of 2023, the last full-year the data was updated). 
+The next relationship we wanted to look at was the number of jobs by remote ratio over the last 5 years. It should be noted that the dataset was updated two months ago, so data from 2024 may not be complete. With that in mind, it appears that the number of jobs in the dataset is generally increasing over time. It appears that there is not a large growth in the number of hybrid jobs in any three categories, but in-person and remote jobs do seem to be growing (at least by the end of 2023, the last full year the data was updated). 
 
 ```{r echo=TRUE}
 # Convert time to factor if it's not already
@@ -458,7 +458,7 @@ ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_rati
 
 #### Discussion: 
 
-Next, we wanted to look at the median salary over time for the different remote ratios in different company sizes. We can see that salaries for hybrid positions appear to be decreasing in medium and large companies, but increasing in small companies. In-person and remote salaries tended to have similar relationships in small and medium companies, in large companies they appear to be inverted (with median salary of remote positions decreasing while in-person median salary increased from 2022-2023). For the incomplete year of 2024, the median salary of remote jobs is rising, while the median salary of in-person jobs is declining. It would be very interesting to see if this trend continues, or if it is due to incomplete data.
+Next, we wanted to look at the median salary over time for the different remote ratios in different company sizes. We can see that salaries for hybrid positions appear to be decreasing in medium and large companies but increasing in small companies. In-person and remote salaries tended to have similar relationships in small and medium companies, in large companies they appear to be inverted (with median salary of remote positions decreasing while in-person median salary increased from 2022-2023). For the incomplete year of 2024, the median salary of remote jobs is rising, while the median salary of in-person jobs is declining. It would be very interesting to see if this trend continues or if it is due to incomplete data.
 
 ```{r echo=TRUE}
 # Create the horizontally rotated box plot with angled x-axis labels, no legend, and custom colors
