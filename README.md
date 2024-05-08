@@ -1,16 +1,11 @@
----
-title: "DS 202 Final Project Proposal"
-author: "Jesse Dolan, Bela Banegas, Jennifer Godbersen"
-date: "`r Sys.Date()`"
-output: html_document
----
+# Data Science Salaries
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+#### Jesse Dolan, Bela Banegas, Jennifer Godbersen
 
-Research Project Title: Data Science Salaries
+## Introduction
 
+
+## Data 
 This data set includes information about data science salaries. Variables include: year, experience level, employment type (full-time, part-time, contract, freelance), job title, salary, salary currency, salary in usd, employee residence, remote ratio (amount of work done remotely), and company location.
 
 ```{r}
@@ -33,7 +28,11 @@ if (any(is.na(df))) {
 
 Data cleaning steps:
 
-There are no empty rows, columns, or NA values at all. We didn't need to sort anything out because we included all necessary sorting inside of our visualization steps. Our data includes 10 different variables listed here.
+There are no empty rows, columns, or NA values at all. We didn't need to sort anything out because we included all necessary sorting inside of our visualization steps. 
+
+## Variables
+
+Our data includes 10 different variables listed here.
 
 Variables (10):
 
@@ -59,11 +58,9 @@ We recieved this data from kaggle and it has 13732 rows
 
 <https://www.kaggle.com/datasets/mexwell/data-science-salary-data>
 
-Our current project idea is to identify the current salaries for people in our field. Particular variables of interest are year, experience level, job title, remote work ratio, and company location.
+## Results
 
-We will be exploring the following relationships:
-
--   Salary over time (Bela)
+###   Salary Over Time
 
 ```{r echo=TRUE}
 library(ggplot2)
@@ -90,7 +87,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
 
--   Salary by company size (Bela)
+###   Salary by Company Size
 
 ```{r echo=TRUE}
 library(ggplot2)
@@ -124,12 +121,6 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  
 ```
-
--   Salary by job title (Jennifer)
-
--   Salary by remote ratio (Jennifer)
-
--   Salary by location - country (Jesse)
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
@@ -166,7 +157,7 @@ The graph illustrates the median salary in USD for data science roles across var
 
 Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about \$150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
 
--   Salary by experience (Jesse)
+###   Salary by Experience
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
@@ -212,24 +203,12 @@ The graph displays the median salary for data science roles across four experien
 
 Over the years, the graph shows a general upward trend in median salary across all experience levels, although the rate of increase varies. The difference between Mid-Level and Senior is notable, with Senior positions commanding a much higher salary, reflecting the added responsibility and expertise required at that level. The consistency in salary growth over the period indicates a robust market for data science roles, with experienced professionals enjoying significant compensation advantages. Despite minor fluctuations, the overall upward trajectory suggests a positive outlook for career progression in the data science field.
 
+
+### Salary by Job Title
+
 ```{r echo=TRUE, message=TRUE, warning=TRUE}
-# Load necessary libraries
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-
-# Calculate unique job titles with count > 50
-unique_job_titles <- df %>%
-  filter(!is.na(job_title)) %>%  # Filter out missing values
-  group_by(job_title) %>%
-  summarize(job_count = n()) %>%
-  filter(job_count > 50) %>%
-  pull(job_title)  # Extract unique job titles as vector
-
-# Filter the original dataframe for plotting
-df_filtered <- df %>%
-  filter(!is.na(job_title)) %>%  # Filter out missing values
-  filter(job_title %in% unique_job_titles)
+# Reorder job titles from greatest to least based on median salary
+df_filtered$job_title <- factor(df_filtered$job_title, levels = median_salaries$job_title[order(-median_salaries$median_salary)])
 
 # Create the plot using the filtered dataframe
 ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
@@ -247,86 +226,118 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
   ) +
   scale_y_continuous(labels = scales::comma)  # Prevent scientific notation by using comma format
 
-
 ```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salarybyjobtitle.png)
+
+
+### Salary by Remote Ratio and Company Size
 
 ```{r echo=TRUE}
+# Convert remote_ratio to factor with specified levels
+df$remote_ratio <- factor(df$remote_ratio, levels = c(0, 50, 100))
+df$company_size <- factor(df$company_size, levels = c("S", "M", "L"))
 
+# Print summary of counts for each level of company_size
+cat("Counts for each level of company_size:\n")
+print(summary(df$company_size))
+
+# Print summary of counts for each level of remote_ratio
+cat("\nCounts for each level of remote_ratio:\n")
+print(summary(df$remote_ratio))
+
+```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/table.png)
+
+```{r echo=TRUE}
 # Load necessary library
 library(ggplot2)
 library(scales)
+library(dplyr)
 
-df$remote_ratio <- factor(df$remote_ratio, levels = c(0, 50, 100))
+# Summarize data by company_size and remote_ratio
+summary_df <- df %>%
+  group_by(company_size, remote_ratio) %>%
+  summarize(count = n()) %>%
+  mutate(prop = count / sum(count))
 
-# Get frequencies of unique values in the remote_ratio column
-remote_ratio_frequency <- table(df$remote_ratio)
-
-# Get frequencies of unique values in the remote_ratio column
-remote_ratio_frequency <- table(df$remote_ratio)
-
-# Convert the frequency table to a dataframe
-remote_ratio_df <- as.data.frame(remote_ratio_frequency)
-
-# Rename the columns for clarity
-names(remote_ratio_df) <- c("Remote Ratio", "Frequency")
-
-# Histogram of Remote Ratio
-ggplot(remote_ratio_df, aes(x = `Remote Ratio`, y = Frequency)) +
-  geom_bar(stat = "identity", fill = "skyblue") +
+# Create the plot
+ggplot(summary_df, aes(x = company_size, y = prop, fill = remote_ratio)) +
+  geom_bar(stat = "identity", position = "stack") +
   labs(
-    title = "Histogram of Remote Ratio",
-    x = "Remote Ratio (%)",
-    y = "Count (# of entries)"
+    title = "Distribution of Remote Ratios by Company Size",
+    x = "Company Size",
+    y = "Proportion of Entries"
   ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+  scale_fill_manual(values = c("skyblue", "lightgreen", "pink")) +  # Custom color palette
+  theme_minimal()
 
+```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/stackedbarchart.png)
 
-# Calculate count of jobs for each combination of time and remote_ratio
-job_counts <- aggregate(job_title ~ work_year + remote_ratio, data = df, FUN = length)
+```{r echo=TRUE}
+# Calculate count of jobs for each combination of time, remote_ratio, and company_size
+job_counts <- aggregate(job_title ~ work_year + remote_ratio + company_size, data = df, FUN = length)
 
-# Plot
+# Plot with faceting by company_size and free y-axis scales
 ggplot(job_counts, aes(x = work_year, y = job_title, group = remote_ratio, color = remote_ratio)) +
   geom_line() +
   geom_point() +
-  labs(title = "Number of Jobs by Remote Ratio Over Time",
-       x = "Year",
-       y = "Number of Jobs",
-       color = "Remote Ratio") +
-  scale_color_manual(values = c("red", "green", "skyblue")) +
-  theme_minimal()
+  labs(
+    title = "Number of Jobs by Remote Ratio Over Time (by Company Size)",
+    x = "Year",
+    y = "Number of Jobs",
+    color = "Remote Ratio"
+  ) +
+  scale_color_manual(values = c("pink", "green", "skyblue")) +
+  theme_minimal() +
+  facet_wrap(~ company_size, scales = "free_y") +  # Facet by company_size variable with free y-axis scales
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.5, vjust = 0.5))  # Rotate y-axis labels vertically
 
-# Convert remote_ratio to factor to treat it as a categorical variable
-df$remote_ratio <- factor(df$remote_ratio)
+```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/jobsovertime.png)
 
+```{r echo=TRUE}
 # Convert time to factor if it's not already
 df$work_year <- as.factor(df$work_year)
 df$work_year <- factor(df$work_year, levels = c("2020", "2021", "2022", "2023", "2024"))
 
-# Calculate average salary for each combination of time and remote_ratio
-average_salary <- aggregate(salary_in_usd ~ work_year + remote_ratio, data = df, FUN = median)
+# Calculate average salary for each combination of time, remote_ratio, and company_size
+average_salary <- aggregate(salary_in_usd ~ work_year + remote_ratio + company_size, data = df, FUN = median)
 
-
-# Average Salary by Remote Ratio Over Time
+# Plot with faceting by company_size and adjusted facet width
 ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_ratio, color = remote_ratio)) +
   geom_line() +
   geom_point() +
-  labs(title = "Median Salary by Remote Ratio Over Time",
-       x = "Year",
-       y = "Median Salary (USD)",
-       color = "Remote Ratio") +
-  scale_color_manual(values = c("red", "green", "skyblue")) +
-  theme_minimal()
-
-# Create the box plot with faceting
-ggplot(df, aes(x = "", y = salary_in_usd)) +
-  geom_boxplot(fill = "skyblue", color = "black") +
-  facet_wrap(~ remote_ratio, scales = "free_x", nrow = 1) +
   labs(
-    title = "Salary Distribution by Remote Ratio",
-    x = "Remote Ratio (%)", 
-    y = "Salary ($)"
-  ) + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
-
+    title = "Median Salary by Remote Ratio Over Time (by Company Size)",
+    x = "Year",
+    y = "Median Salary (USD)",
+    color = "Remote Ratio"
+  ) +
+  scale_color_manual(values = c("pink", "green", "skyblue")) +
+  theme_minimal() +
+  facet_wrap(~ company_size, scales = "free_y") +  # Facet by company_size variable with free y-axis scales
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/salaryovertime.png)
+
+```{r echo=TRUE}
+# Create the horizontally rotated box plot with angled x-axis labels, no legend, and custom colors
+ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
+  geom_boxplot() +
+  facet_grid(company_size ~ remote_ratio, scales = "free_y") +
+  labs(
+    title = "Salary Distribution by Remote Ratio and Company Size",
+    x = "Salary (USD)",
+    y = "Remote Ratio (%)"
+  ) +
+  scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) +
+  scale_fill_manual(values = c("skyblue", "skyblue", "skyblue")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")  # Remove legend
+
+```
+[![image](https://github.com/Jssyi/Final-Project/blob/7e65f941357eaf18f7d1fc8b9d029383bdac6494/remoteratiosizedistribution.png)
+
+## Conclusion
