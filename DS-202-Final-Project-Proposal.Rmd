@@ -175,23 +175,8 @@ ggplot(salary_summary, aes(x = experience_level, y = mean_salary)) +
 ```
 
 ```{r echo=TRUE, message=TRUE, warning=TRUE}
-# Load necessary libraries
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-
-# Calculate unique job titles with count > 50
-unique_job_titles <- df %>%
-  filter(!is.na(job_title)) %>%  # Filter out missing values
-  group_by(job_title) %>%
-  summarize(job_count = n()) %>%
-  filter(job_count > 50) %>%
-  pull(job_title)  # Extract unique job titles as vector
-
-# Filter the original dataframe for plotting
-df_filtered <- df %>%
-  filter(!is.na(job_title)) %>%  # Filter out missing values
-  filter(job_title %in% unique_job_titles)
+# Reorder job titles from greatest to least based on median salary
+df_filtered$job_title <- factor(df_filtered$job_title, levels = median_salaries$job_title[order(-median_salaries$median_salary)])
 
 # Create the plot using the filtered dataframe
 ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
@@ -214,81 +199,109 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
 
 ```{r echo=TRUE}
 
+# Convert remote_ratio to factor with specified levels
+df$remote_ratio <- factor(df$remote_ratio, levels = c(0, 50, 100))
+df$company_size <- factor(df$company_size, levels = c("S", "M", "L"))
+
+# Print summary of counts for each level of company_size
+cat("Counts for each level of company_size:\n")
+print(summary(df$company_size))
+
+# Print summary of counts for each level of remote_ratio
+cat("\nCounts for each level of remote_ratio:\n")
+print(summary(df$remote_ratio))
+
+```
+
+
+```{r echo=TRUE}
+
 # Load necessary library
 library(ggplot2)
 library(scales)
+library(dplyr)
 
-df$remote_ratio <- factor(df$remote_ratio, levels = c(0, 50, 100))
+# Summarize data by company_size and remote_ratio
+summary_df <- df %>%
+  group_by(company_size, remote_ratio) %>%
+  summarize(count = n()) %>%
+  mutate(prop = count / sum(count))
 
-# Get frequencies of unique values in the remote_ratio column
-remote_ratio_frequency <- table(df$remote_ratio)
-
-# Get frequencies of unique values in the remote_ratio column
-remote_ratio_frequency <- table(df$remote_ratio)
-
-# Convert the frequency table to a dataframe
-remote_ratio_df <- as.data.frame(remote_ratio_frequency)
-
-# Rename the columns for clarity
-names(remote_ratio_df) <- c("Remote Ratio", "Frequency")
-
-# Histogram of Remote Ratio
-ggplot(remote_ratio_df, aes(x = `Remote Ratio`, y = Frequency)) +
-  geom_bar(stat = "identity", fill = "skyblue") +
+# Create the plot
+ggplot(summary_df, aes(x = company_size, y = prop, fill = remote_ratio)) +
+  geom_bar(stat = "identity", position = "stack") +
   labs(
-    title = "Histogram of Remote Ratio",
-    x = "Remote Ratio (%)",
-    y = "Count (# of entries)"
+    title = "Distribution of Remote Ratios by Company Size",
+    x = "Company Size",
+    y = "Proportion of Entries"
   ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+  scale_fill_manual(values = c("skyblue", "lightgreen", "pink")) +  # Custom color palette
+  theme_minimal()
 
+```
 
-# Calculate count of jobs for each combination of time and remote_ratio
-job_counts <- aggregate(job_title ~ work_year + remote_ratio, data = df, FUN = length)
+```{r echo=TRUE}
 
-# Plot
+# Calculate count of jobs for each combination of time, remote_ratio, and company_size
+job_counts <- aggregate(job_title ~ work_year + remote_ratio + company_size, data = df, FUN = length)
+
+# Plot with faceting by company_size and free y-axis scales
 ggplot(job_counts, aes(x = work_year, y = job_title, group = remote_ratio, color = remote_ratio)) +
   geom_line() +
   geom_point() +
-  labs(title = "Number of Jobs by Remote Ratio Over Time",
-       x = "Year",
-       y = "Number of Jobs",
-       color = "Remote Ratio") +
-  scale_color_manual(values = c("red", "green", "skyblue")) +
-  theme_minimal()
+  labs(
+    title = "Number of Jobs by Remote Ratio Over Time (by Company Size)",
+    x = "Year",
+    y = "Number of Jobs",
+    color = "Remote Ratio"
+  ) +
+  scale_color_manual(values = c("pink", "green", "skyblue")) +
+  theme_minimal() +
+  facet_wrap(~ company_size, scales = "free_y") +  # Facet by company_size variable with free y-axis scales
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.5, vjust = 0.5))  # Rotate y-axis labels vertically
+```
 
-# Convert remote_ratio to factor to treat it as a categorical variable
-df$remote_ratio <- factor(df$remote_ratio)
+```{r echo=TRUE}
+
 
 # Convert time to factor if it's not already
 df$work_year <- as.factor(df$work_year)
 df$work_year <- factor(df$work_year, levels = c("2020", "2021", "2022", "2023", "2024"))
 
-# Calculate average salary for each combination of time and remote_ratio
-average_salary <- aggregate(salary_in_usd ~ work_year + remote_ratio, data = df, FUN = median)
+# Calculate average salary for each combination of time, remote_ratio, and company_size
+average_salary <- aggregate(salary_in_usd ~ work_year + remote_ratio + company_size, data = df, FUN = median)
 
-
-# Average Salary by Remote Ratio Over Time
+# Plot with faceting by company_size and adjusted facet width
 ggplot(average_salary, aes(x = work_year, y = salary_in_usd, group = remote_ratio, color = remote_ratio)) +
   geom_line() +
   geom_point() +
-  labs(title = "Median Salary by Remote Ratio Over Time",
-       x = "Year",
-       y = "Median Salary (USD)",
-       color = "Remote Ratio") +
-  scale_color_manual(values = c("red", "green", "skyblue")) +
-  theme_minimal()
-
-# Create the box plot with faceting
-ggplot(df, aes(x = "", y = salary_in_usd)) +
-  geom_boxplot(fill = "skyblue", color = "black") +
-  facet_wrap(~ remote_ratio, scales = "free_x", nrow = 1) +
   labs(
-    title = "Salary Distribution by Remote Ratio",
-    x = "Remote Ratio (%)", 
-    y = "Salary ($)"
-  ) + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
+    title = "Median Salary by Remote Ratio Over Time (by Company Size)",
+    x = "Year",
+    y = "Median Salary (USD)",
+    color = "Remote Ratio"
+  ) +
+  scale_color_manual(values = c("pink", "green", "skyblue")) +
+  theme_minimal() +
+  facet_wrap(~ company_size, scales = "free_y") +  # Facet by company_size variable with free y-axis scales
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r echo=TRUE}
+  
+# Create the horizontally rotated box plot with angled x-axis labels, no legend, and custom colors
+ggplot(df, aes(x = salary_in_usd, y = "", fill = remote_ratio)) +
+  geom_boxplot() +
+  facet_grid(company_size ~ remote_ratio, scales = "free_y") +
+  labs(
+    title = "Salary Distribution by Remote Ratio and Company Size",
+    x = "Salary (USD)",
+    y = "Remote Ratio (%)"
+  ) +
+  scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) +
+  scale_fill_manual(values = c("skyblue", "skyblue", "skyblue")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")  # Remove legend
 
 
 ```
