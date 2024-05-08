@@ -1,16 +1,11 @@
----
-title: "DS 202 Final Project Proposal"
-author: "Jesse Dolan, Bela Banegas, Jennifer Godbersen"
-date: "`r Sys.Date()`"
-output: html_document
----
+# Data Science Salaries
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+#### Jesse Dolan, Bela Banegas, Jennifer Godbersen
 
-Research Project Title: Data Science Salaries
+## Introduction
 
+
+## Data 
 This data set includes information about data science salaries. Variables include: year, experience level, employment type (full-time, part-time, contract, freelance), job title, salary, salary currency, salary in usd, employee residence, remote ratio (amount of work done remotely), and company location.
 
 ```{r}
@@ -33,7 +28,11 @@ if (any(is.na(df))) {
 
 Data cleaning steps:
 
-There are no empty rows, columns, or NA values at all. We didn't need to sort anything out because we included all necessary sorting inside of our visualization steps. Our data includes 10 different variables listed here.
+There are no empty rows, columns, or NA values at all. We didn't need to sort anything out because we included all necessary sorting inside of our visualization steps. 
+
+## Variables
+
+Our data includes 10 different variables listed here.
 
 Variables (10):
 
@@ -59,11 +58,9 @@ We recieved this data from kaggle and it has 13732 rows
 
 <https://www.kaggle.com/datasets/mexwell/data-science-salary-data>
 
-Our current project idea is to identify the current salaries for people in our field. Particular variables of interest are year, experience level, job title, remote work ratio, and company location.
+## Results
 
-We will be exploring the following relationships:
-
--   Salary over time (Bela)
+###   Salary Over Time
 
 ```{r echo=TRUE}
 library(ggplot2)
@@ -90,7 +87,7 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary)) +
   scale_y_continuous(labels = scales::comma)  # for readability use comma format
 ```
 
--   Salary by company size (Bela)
+###   Salary by Company Size
 
 ```{r echo=TRUE}
 library(ggplot2)
@@ -124,12 +121,6 @@ ggplot(salary_over_time, aes(x = work_year, y = mean_salary, color = company_siz
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)  
 ```
-
--   Salary by job title (Jennifer)
-
--   Salary by remote ratio (Jennifer)
-
--   Salary by location - country (Jesse)
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
@@ -166,7 +157,7 @@ The graph illustrates the median salary in USD for data science roles across var
 
 Meanwhile, the median salary in the United States, which is often considered a hub for technology and data science, is about \$150,000. Although this value is significantly lower than Qatar's, it is still relatively high compared to other countries on the graph. This distribution shows a wide range of salary levels for data science roles worldwide, indicating that geographic location is a significant factor in salary determination. Factors such as cost of living, market maturity, and regional demand for data science talent likely play critical roles in shaping these differences.
 
--   Salary by experience (Jesse)
+###   Salary by Experience
 
 ```{r echo=TRUE, fig.height=6, fig.width=12}
 # Load necessary libraries
@@ -212,6 +203,9 @@ The graph displays the median salary for data science roles across four experien
 
 Over the years, the graph shows a general upward trend in median salary across all experience levels, although the rate of increase varies. The difference between Mid-Level and Senior is notable, with Senior positions commanding a much higher salary, reflecting the added responsibility and expertise required at that level. The consistency in salary growth over the period indicates a robust market for data science roles, with experienced professionals enjoying significant compensation advantages. Despite minor fluctuations, the overall upward trajectory suggests a positive outlook for career progression in the data science field.
 
+
+### Salary by Job Title
+
 ```{r echo=TRUE, message=TRUE, warning=TRUE}
 # Load necessary libraries
 library(ggplot2)
@@ -249,6 +243,7 @@ ggplot(df_filtered, aes(x = job_title, y = salary_in_usd)) +
 
 
 ```
+### Salary for Remote Ratio by Company Size
 
 ```{r echo=TRUE}
 
@@ -330,3 +325,5 @@ ggplot(df, aes(x = "", y = salary_in_usd)) +
 
 
 ```
+
+## Conclusion
